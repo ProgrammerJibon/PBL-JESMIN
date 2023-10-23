@@ -1,0 +1,29 @@
+# Checking if server supported rewrite engine
+<IfModule mod_rewrite.c>
+# turning on rewrite engine
+RewriteEngine On
+#RewriteCond %{HTTPS} off 
+#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+RewriteRule ^style.css$ css.php
+RewriteRule ^loader.css$ css_loader.php
+RewriteRule ^script.js$ js.php
+# rewrite condition if directory not exists
+# rewrite condition if file not exists
+# rewriting condition
+RewriteRule ^pic/(.*)/(.*)$ /pictures.php?pic_size=$1&pic_url=$2 [L,QSA]
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteCond %{SCRIPT_FILENAME} !-f
+RewriteRule ^(.*) /index.php?page=$1 [L,QSA]
+</IfModule>
+# setting cachce for 7days
+<FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
+Header set Cache-Control "max-age=604800, public"
+</FilesMatch>
+<Files 403.shtml>
+order allow,deny
+allow from all
+</Files>
+#Create filter to match files you want to cache 
+<Files *.js>
+Header add "Cache-Control" "max-age=604800"
+</Files>
